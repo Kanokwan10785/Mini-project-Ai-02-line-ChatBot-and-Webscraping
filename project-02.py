@@ -12,16 +12,13 @@ import faiss
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
-app = Flask(__name__)
 
 # Neo4j connection details
 URI = "neo4j://localhost"
 AUTH = ("neo4j", "6410110004")
 
-# Initialize LineBotApi and WebhookHandler with access token and secret
-ACCESS_TOKEN = 'IuLTrZFFecg63h5BngG9BPzGGKPXrC+Xt+yKoadlP00RNu5/xO2DmFsQgZTSK0HLleu63PXCOO35+moHW6SeYQo+LtfC2vA4H+79nb11zh8GH1AhjhsB9Ycw8G6QfhcFOHGDY1/hi1l4G5ZVF9xeFAdB04t89/1O/w1cDnyilFU='
-SECRET = '991c2f01aa85f28eabfbbf2c9a96c24c'
-
+ACCESS_TOKEN = 'ACCESS_TOKEN Line'
+SECRET = 'SECRET Line'
 line_bot_api = LineBotApi(ACCESS_TOKEN)
 handler = WebhookHandler(SECRET)
 
@@ -148,26 +145,17 @@ def llama_change(response):
 # Function to perform web scraping for skincare or makeup products
 def scrape_amway(url):
     try:
-        # Set up Chrome options for Selenium WebDriver
         options = webdriver.ChromeOptions()
-        options.add_argument('--headless')  # Run in headless mode (no browser UI)
+        options.add_argument('--headless')  
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
         
-        # Initialize the WebDriver
         driver = webdriver.Chrome(options=options)
         driver.get(url)
-        
-        # Allow time for the page to fully render
-        time.sleep(5)  # Adjust if necessary depending on page load time
-        
-        # Extract the page source and pass it to BeautifulSoup
+        time.sleep(5)        
         soup = BeautifulSoup(driver.page_source, 'html.parser')
-        
-        # Close the WebDriver after extraction
         driver.quit()
-
-        # Check if it's a category page or search page
+        
         if "Categories" in url:
             return scrape_category_page(soup)  # Category page
         elif "search" in url:
@@ -461,6 +449,8 @@ def linebot():
     except Exception as e:
         print(f"Error processing the LINE event: {e}")
         return 'Error', 500
+    
+app = Flask(__name__)
     
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
